@@ -40,3 +40,34 @@ class BuyerProfileResponseModel {
   };
 }
 
+class Data {
+  int id;
+  String name;
+  String address;
+  String phone;
+  String? photo;
+
+  Data({
+    required this.id,
+    required this.name,
+    required this.address,
+    required this.phone,
+    required this.photo,
+  });
+
+  Data copyWith({
+    int? id,
+    String? name,
+    String? address,
+    String? phone,
+    String? photo,
+  }) => Data(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    address: address ?? this.address,
+    phone: phone ?? this.phone,
+    photo: photo ?? this.photo,
+  );
+
+  
+}
