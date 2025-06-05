@@ -13,4 +13,21 @@ class BuyerProfileRequestModel {
         this.photo,
     });
 
+    factory BuyerProfileRequestModel.fromJson(String str) => BuyerProfileRequestModel.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory BuyerProfileRequestModel.fromMap(Map<String, dynamic> json) => BuyerProfileRequestModel(
+        name: json["name"],
+        address: json["address"],
+        phone: json["phone"],
+        photo: json["photo"],
+    );
+
+    Map<String, dynamic> toMap() => {
+        "name": name,
+        "address": address,
+        "phone": phone,
+        "photo": photo,
+    };
 }
