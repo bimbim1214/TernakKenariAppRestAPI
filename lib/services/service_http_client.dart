@@ -8,7 +8,7 @@ class ServiceHttpClient {
   final secureStorage = FlutterSecureStorage();
 
   //post
-  Future<http.Response> post(String endpoint, {Map<String, String>? headers, Object? body}) async {
+  Future<http.Response> post(String endpoint, Map<String, dynamic> map, {Map<String, String>? headers, Object? body}) async {
     final url = Uri.parse('$baseUrl/$endpoint');
     try{
       final response = await http.post(
@@ -28,7 +28,7 @@ class ServiceHttpClient {
   //post with token
   Future<http.Response> postWithToken(
     String endpoint, 
-    Map<String, String>? headers
+    Map<String, dynamic> body,
     ) async {
     final token = await secureStorage.read(key: 'token');
     final url = Uri.parse('$baseUrl/$endpoint');
@@ -40,7 +40,7 @@ class ServiceHttpClient {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         },
-        body: json.encode(headers),
+        body: json.encode(body),
       );
       return response;
     } catch (e) {
