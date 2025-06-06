@@ -6,7 +6,7 @@ import 'package:tekukur_app/core/components/spaces.dart';
 import 'package:tekukur_app/core/constants/colors.dart';
 import 'package:tekukur_app/core/core.dart';
 import 'package:tekukur_app/data/model/request/auth/register_request_model.dart';
-import 'package:tekukur_app/presentation/auth/bloc/login_screen.dart';
+import 'package:tekukur_app/presentation/auth/login_screen.dart';
 import 'package:tekukur_app/presentation/auth/bloc/register/register_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
