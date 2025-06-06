@@ -36,3 +36,45 @@ class GetIndukById {
   };
 }
 
+class GetAllIndukModel {
+  final String message;
+  final int statusCode;
+  final List<GetInduk> data;
+
+  GetAllIndukModel({
+    required this.message,
+    required this.statusCode,
+    required this.data,
+  });
+
+  GetAllIndukModel copyWith({
+    String? message,
+    int? statusCode,
+    List<GetInduk>? data,
+  }) => GetAllIndukModel(
+    message: message ?? this.message,
+    statusCode: statusCode ?? this.statusCode,
+    data: data ?? this.data,
+  );
+
+  factory GetAllIndukModel.fromRawJson(String str) =>
+      GetAllIndukModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory GetAllIndukModel.fromJson(Map<String, dynamic> json) =>
+      GetAllIndukModel(
+        message: json["message"],
+        statusCode: json["status_code"],
+        data: List<GetInduk>.from(
+          json["data"].map((x) => GetInduk.fromJson(x)),
+        ),
+      );
+
+  Map<String, dynamic> toJson() => {
+    "message": message,
+    "status_code": statusCode,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+  };
+}
+
