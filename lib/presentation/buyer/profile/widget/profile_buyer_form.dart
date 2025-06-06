@@ -17,14 +17,6 @@ class ProfileBuyerInputFormState extends State<ProfileBuyerInputForm> {
   final phoneController = TextEditingController();
 
   @override
-  void dispose() {
-    nameController.dispose();
-    addressController.dispose();
-    phoneController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBuyerBloc, ProfileBuyerState>(
       builder: (context, state) {
@@ -35,39 +27,40 @@ class ProfileBuyerInputFormState extends State<ProfileBuyerInputForm> {
           child: Form(
             key: _formKey,
             child: ListView(
-              shrinkWrap: true,
               children: [
                 TextFormField(
                   controller: nameController,
-                  decoration: const InputDecoration(labelText: "Nama"),
+                  decoration: InputDecoration(labelText: "Nama"),
                   validator: (value) =>
-                      value == null || value.isEmpty ? "Nama tidak boleh kosong" : null,
+                      value!.isEmpty ? "Nama tidak boleh kosong" : null,
                 ),
                 TextFormField(
                   controller: addressController,
-                  decoration: const InputDecoration(labelText: "Alamat"),
+                  decoration: InputDecoration(labelText: "Alamat"),
                   validator: (value) =>
-                      value == null || value.isEmpty ? "Alamat tidak boleh kosong" : null,
+                      value!.isEmpty ? "Alamat tidak boleh kosong" : null,
                 ),
                 TextFormField(
                   controller: phoneController,
-                  decoration: const InputDecoration(labelText: "No HP"),
-                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(labelText: "No HP"),
                   validator: (value) =>
-                      value == null || value.isEmpty ? "Nomor HP tidak boleh kosong" : null,
+                      value!.isEmpty ? "Nomor HP tidak boleh kosong" : null,
                 ),
                 const SizedBox(height: 20),
                 BlocConsumer<ProfileBuyerBloc, ProfileBuyerState>(
                   listener: (context, state) {
                     if (state is ProfileBuyerAdded) {
-                      context.read<ProfileBuyerBloc>().add(GetProfileBuyerEvent());
+                      // Refresh profile after adding
+                      context.read<ProfileBuyerBloc>().add(
+                        GetProfileBuyerEvent(),
+                      );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(state.profile.message)),
                       );
-                    } else if (state is ProfileBuyerAddError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
-                      );
+                    } else if (state is ProfileBuyerError) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.message)));
                     }
                   },
                   builder: (context, state) {
@@ -77,10 +70,10 @@ class ProfileBuyerInputFormState extends State<ProfileBuyerInputForm> {
                           : () {
                               if (_formKey.currentState!.validate()) {
                                 final request = BuyerProfileRequestModel(
-                                  name: nameController.text.trim(),
-                                  address: addressController.text.trim(),
-                                  phone: phoneController.text.trim(),
-                                  photo: "", // Default kosong
+                                  name: nameController.text,
+                                  address: addressController.text,
+                                  phone: phoneController.text,
+                                  photo: "",
                                 );
                                 context.read<ProfileBuyerBloc>().add(
                                   AddProfileBuyerEvent(requestModel: request),
@@ -88,15 +81,13 @@ class ProfileBuyerInputFormState extends State<ProfileBuyerInputForm> {
                               }
                             },
                       child: isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ? CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
                               ),
                             )
-                          : const Text("Simpan Profil"),
+                          : Text("Simpan Profil"),
                     );
                   },
                 ),
